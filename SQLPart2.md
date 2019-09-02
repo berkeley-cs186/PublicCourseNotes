@@ -142,9 +142,9 @@ ON courses.number = enrollment.number;
 The result is: 
 ```
 number|name|number|students 
-------+----+-----+--------
-CS186 |DB  |CS186|700
-CS188 |AI  |CS188|800
+------+----+------+--------
+CS186 |DB  |CS186 |700
+CS188 |AI  |CS188 |800
 ```
 
 It can be annoying to type out the entire table name each time we refer to it, so instead we can **alias** the table name. This allows us to rename the table for the rest of the query as something else (usually only a few characters). To do this, after listing the table in the `FROM` we add `AS <alias_name>`. Here is an equivalent query that uses aliases:
@@ -157,9 +157,9 @@ ON c.number = e.number;
 
 ```
 number|name|number|students 
-------+----+-----+--------
-CS186 |DB  |CS186|700
-CS188 |AI  |CS188|800
+------+----+------+--------
+CS186 |DB  |CS186 |700
+CS188 |AI  |CS188 |800
 ```
 
 ## Natural Join

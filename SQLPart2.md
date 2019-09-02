@@ -88,7 +88,7 @@ CS189 |ML  |NULL |NULL
 ```
 Notice that CS189 is now included and the columns that should be from the right table (`c_num`, `students`) are `NULL`.
 
-The **right outer join** is the exact same thing as the left outer join but it keeps all the rows from the right table instead of the left table. The following query is identical to the query above that uses the left outer join (the columns will be in a different order though):
+The **right outer join** is the exact same thing as the left outer join but it keeps all the rows from the right table instead of the left table. The following query is identical to the query above that uses the left outer join:
 ```sql
 SELECT * 
 FROM enrollment RIGHT OUTER JOIN courses
@@ -142,11 +142,9 @@ ON courses.number = enrollment.number;
 The result is: 
 ```
 number|name|number|students 
------ +----+------+--------
-CS186 |DB  |CS186 |700
-CS188 |AI  |CS188 |800
-CS189 |ML  |NULL  |NULL
-NULL  |NULL|CS160 |400
+------+----+-----+--------
+CS186 |DB  |CS186|700
+CS188 |AI  |CS188|800
 ```
 
 It can be annoying to type out the entire table name each time we refer to it, so instead we can **alias** the table name. This allows us to rename the table for the rest of the query as something else (usually only a few characters). To do this, after listing the table in the `FROM` we add `AS <alias_name>`. Here is an equivalent query that uses aliases:
@@ -159,11 +157,9 @@ ON c.number = e.number;
 
 ```
 number|name|number|students 
------ +----+------+--------
-CS186 |DB  |CS186 |700
-CS188 |AI  |CS188 |800
-CS189 |ML  |NULL  |NULL
-NULL  |NULL|CS160 |400
+------+----+-----+--------
+CS186 |DB  |CS186|700
+CS188 |AI  |CS188|800
 ```
 
 ## Natural Join
@@ -186,7 +182,7 @@ SELECT number
 FROM enrollment
 WHERE students >= (
     SELECT AVG(students)
-    FROM enrollment
+    FROM enrollment;
 );
 ```
 The output of this query is:
@@ -205,11 +201,11 @@ The subquery can also be correlated with the outer query. Each row essentially g
 
 ```sql
 SELECT * 
-FROM courses
+FROM classes
 WHERE EXISTS (
   SELECT *
   FROM enrollment
-  WHERE courses.number = enrollment.number
+  WHERE classes.number = enrollment.number
 );
 ```
 As expected, this query returns:
@@ -219,7 +215,7 @@ number|name
 CS188 |AI
 CS186 |DB
 ```
-Let's start by examining the subquery. It compares the `courses.number` (the number of the class from the current row) to every `enrollment.number` and returns the row if they match. Therefore, the only rows that will ever be returned are rows with courses that occur in each table. The `EXISTS` keyword is a set operator that returns true if any rows are returned by the subquery and false if otherwise. For`CS186` and `CS188` it will return true (because a row is returned by the subquery), but for `CS189` it will return false. There are a lot of other set operators you should know (including `ANY`, `ALL`, `UNION`, `INTERSECT`, `DIFFERENCE`, `IN`) but we will not cover any others in this note. 
+Let's start by examining the subquery. It compares the `classes.number` (the number of the class from the current row) to every `enrollment.number` and returns the row if they match. Therefore, the only rows that will ever be returned are rows with classes that occur in each table. The `EXISTS` keyword is a set operator that returns true if any rows are returned by the subquery and false if otherwise. For`CS186` and `CS188` it will return true (because a row is returned by the subquery), but for `CS189` it will return false. There are a lot of other set operators you should know (including `ANY`, `ALL`, `UNION`, `INTERSECT`, `DIFFERENCE`, `IN`) but we will not cover any others in this note. 
 
 ## Subqueries in the From
 You can also use subqueries in the `FROM` clause. This lets you create a temporary table to query from. Here is an example:
@@ -228,7 +224,7 @@ You can also use subqueries in the `FROM` clause. This lets you create a tempora
 SELECT *
 FROM (
     SELECT number
-    FROM courses
+    FROM classes
 ) as a
 WHERE number = 'CS186';
 ```
